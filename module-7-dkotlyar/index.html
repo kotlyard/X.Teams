@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <title> Wallet </title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+   <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.js"></script>
+   <script type="text/javascript">
+      const testnet = 'https://ropsten.infura.io/';
+      const web3 = new Web3(new Web3.providers.HttpProvider(testnet));
+      var current_wallet;
+
+      function checkUser(login, password) {
+         if (localStorage.getItem(login) == null)
+         {
+            current_wallet = web3.eth.accounts.wallet.create(1);
+            current_wallet.save(login, password);
+            document.getElementById("private_key").innerHTML = "Your private key: " + current_wallet[0]['privateKey'];
+            document.getElementById("public_address").innerHTML = "Your public address: " + current_wallet[0]['address'];
+         }
+         else
+         {
+            current_wallet = web3.eth.accounts.wallet.load(login, password);
+            document.getElementById("private_key").innerHTML = "Your private key: " + current_wallet[0]['privateKey'];
+            document.getElementById("public_address").innerHTML = "Your public address: " + current_wallet[0]['address'];
+         }
+      }
+   </script>
+</head>
+<body>
+   <h1> Ethereum Wallet </h1>
+   <div id="id01" class="modal">
+     <form class="modal-content animate">
+       <div class="container">
+         <label for="uname"><b>Username</b></label>
+         <input type="text" placeholder="Enter Username" name="uname" required>
+         <br>
+         <label for="psw"><b>Password</b></label>
+         <input type="password" placeholder="Enter Password" name="psw" required>
+         <br>
+         <button id='btn1' onclick="checkUser(uname.value, psw.value)">Login</button>
+         <script type="text/javascript">
+            document.getElementById("btn1").addEventListener("click", function(event){
+              event.preventDefault()
+            });
+         </script>
+       </div>
+       <div class="container" style="background-color:#f1f1f1">
+       </div>
+     </form>
+   </div>
+   <br><br>
+   <h2 id="public_address"> Hello </h2>
+   <h2 id="private_key"> there </h2>
+   <br>
+   <label for="forbalance"></label>
+   <input id="uniq" type='text' placeholder="Enter address to get balance" name="forbalance" required>
+   <button id='btn2' onclick="showBalance()">Get Balance</button>
+   <h3 id='balanceh' style="visibility:hidden">You have <span class="black"><span id="balance"> 0 </span> Ether </span></h3>
+   <script type="text/javascript">
+      async function showBalance() {
+         let tmp = document.getElementById("uniq").value;
+         let balance =  await web3.eth.getBalance(tmp).then(res => {return res;}) / 1000000000000000000; 
+         console.log(balance)
+         document.getElementById("balanceh").style.visibility = "visible";
+         document.getElementById("balance").innerHTML = balance;
+      }
+   </script>
+   <a href="new_wallet.html" style="visibility:hidden" class="create_new_wallet"> 
+      Create New Wallet
+   </a>
+   <a href="import_wallet.html" style="visibility:hidden" class="import_wallet"> 
+      Import Wallet
+   </a>
+   <br>
+</body>
+
+</html>

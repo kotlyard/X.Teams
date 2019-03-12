@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <title> Wallet </title>
+   <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+   <script>
+      const testnet = 'https://ropsten.infura.io/';
+      const web3 = new Web3(new Web3.providers.HttpProvider(testnet));
+      var current_wallet = createWallet();
+
+
+      function getBalance(address) {
+         var balance = web3.eth.getBalance(address);
+         balance = web3.toDecimal(balance);
+         return (balance / 1000000000000000000);
+      }
+
+      function createWallet() {
+         current_wallet = web3.eth.accounts.wallet.create(1);
+         document.getElementById("private_key").innerHTML = "Your private key: " + current_wallet[0].privateKey;
+         document.getElementById("public_address").innerHTML = "Your public address: " + current_wallet[0].address;
+      }
+
+      function importWallet() {
+
+      }
+      function sendEther(account, to, amount) {
+         return (true);
+      }
+
+   </script>
+
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+</head>
+
+<body>
+   <h1>Ethereum Wallet</h1>
+   <br>
+   <h2 id="public_address"> Hello </h2>
+   <h2 id="private_key"> there </h2>
+   <h3>You have <span class="black"><span id="balance"> 0 </span> Ether </span></h3>
+   <br>
+   <h1>Send Ether</h1>
+   <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="amount in wei"></input>
+   <br><label for="receiver">To Address:</label><input type="text" id="receiver" placeholder="0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
+   <br><br><button id="send" onclick="sendCoin()">Send Ether</button>
+   <br><br>
+   <span id="status"></span>
+   <br>
+   <script>
+      document.getElementById("balance").innerHTML = getBalance('0x57660d6E274e9D12afDA053125e78D5C9138f5D2');
+   </script>
+</body>
+
+</html>
